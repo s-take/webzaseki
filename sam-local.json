@@ -1,0 +1,12 @@
+{
+  "GetSeats": {
+    "DYNAMODB_ENDPOINT": "http://localhost:4569/",
+    "SEAT_TABLE_NAME": "seats",
+    "SEQ_TABLE_NAME": "sequences"
+  },
+  "PostSeats": {
+    "DYNAMODB_ENDPOINT": "http://localhost:4569/",
+    "SEAT_TABLE_NAME": "seats",
+    "SEQ_TABLE_NAME": "sequences"
+  }
+}

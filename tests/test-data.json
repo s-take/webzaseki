@@ -1,0 +1,14 @@
+{
+  "seat_id": {
+    "S": "1"
+  },
+  "name": {
+    "S": "take"
+  },
+  "comment": {
+    "S": "ハッカソン中"
+  },
+  "state": {
+    "S": "sitting"
+  }
+}

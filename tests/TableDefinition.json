@@ -1,0 +1,19 @@
+{
+    "TableName": "seats",
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "seat_id",
+            "AttributeType": "S"
+        }
+    ],
+    "KeySchema": [
+        {
+            "KeyType": "HASH",
+            "AttributeName": "seat_id"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "WriteCapacityUnits": 1,
+        "ReadCapacityUnits": 1
+    }
+}

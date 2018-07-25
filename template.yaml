@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: webzaseki
+Globals:
+    Function:
+        Timeout: 30
+        Runtime: python3.6
+
+Parameters:
+    DynamoDBEndpoint:
+        Type: String
+        Default: https://dynamodb.ap-northeast-1.amazonaws.com/
+    SequenceTableName:
+        Type: String
+        Default: sequences
+    SeatTableName:
+        Type: String
+        Default: seats
+#    FloorTableName:
+#        Type: String
+#        Default: floors
+
+Resources:
+    SeatTable:
+        Type: "AWS::Serverless::SimpleTable"
+        Properties:
+            PrimaryKey:
+                Name: seat_id
+                Type: Number
+        ProvisionedThroughput:
+            ReadCapacityUnits: 2
+            WriteCapacityUnits: 2
+
+    GetSeats:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: build/
+            Handler: app.get_seats
+            Policies: AmazonDynamoDBReadOnlyAccess
+            Environment: 
+                Variables:
+                    DYNAMODB_ENDPOINT: !Ref DynamoDBEndpoint
+                    SEQ_TABLE_NAME:
+                        Fn::Sub: ${SequenceTableName}
+                    SEAT_TABLE_NAME:
+                        Fn::Sub: ${SeatTableName}
+            Events:
+                GetSeatsAPI:
+                    Type: Api 
+                    Properties:
+                        Path: /seats/{seatId}
+                        Method: get
+
+    PostSeats:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: build/
+            Handler: app.add_seats
+            Policies: AmazonDynamoDBFullAccess
+            Environment: 
+                Variables:
+                    DYNAMODB_ENDPOINT: !Ref DynamoDBEndpoint
+                    SEQ_TABLE_NAME:
+                        Fn::Sub: ${SequenceTableName}
+                    SEAT_TABLE_NAME:
+                        Fn::Sub: ${SeatTableName}
+            Events:
+                PostSeatsAPI:
+                    Type: Api 
+                    Properties:
+                        Path: /seats
+                        Method: post
+
+    PutSeats:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: build/
+            Handler: app.update_seats
+            Policies: AmazonDynamoDBFullAccess
+            Environment: 
+                Variables:
+                    DYNAMODB_ENDPOINT: !Ref DynamoDBEndpoint
+                    SEQ_TABLE_NAME:
+                        Fn::Sub: ${SequenceTableName}
+                    SEAT_TABLE_NAME:
+                        Fn::Sub: ${SeatTableName}
+            Events:
+                PostSeatsAPI:
+                    Type: Api 
+                    Properties:
+                        Path: /seats/{seatId}
+                        Method: put
